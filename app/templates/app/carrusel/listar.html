@@ -1,0 +1,52 @@
+{% extends 'app/admin.html' %} {% load static %} {% block contenido %}
+{% block js %}
+<script>
+    function eliminarImagen(id) {
+        Swal.fire({
+            "title": "¿Estas seguro?",
+            "text": "esta acción no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3545"
+        })
+        .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_imagen/" + id + "/"
+                }
+            })
+
+    }
+</script>
+
+{% endblock %}
+
+
+<h2>Lista de Imágenes</h2>
+<div class="row">
+    {% for image in images %}
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <img src="{{ image.image.url }}" class="card-img-top" alt="Image">
+                <div class="card-body">
+                    {% if perms.app.delete_categoria_doc %}
+                    <a href= "#" onclick="eliminarImagen({{image.id}})" class="btn btn-danger btn-sm">Eliminar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

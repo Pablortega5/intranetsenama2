@@ -1,0 +1,130 @@
+{% extends 'app/admin.html' %} {% load static %} {% block contenido %}
+{% block js %}
+
+<script>
+
+    function eliminarDocumento(id) {
+        Swal.fire({
+            "title": "¿Estas seguro?",
+            "text": "esta acción no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3545"
+        })
+        .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_documento/" + id + "/"
+                }
+            })
+
+    }
+</script>
+
+{% endblock %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <br>
+            <h2>Documentos y Eventos</h2>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'crear_documento' %}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Documento</a>
+                        <hr>
+                    {% endif %}
+                    <form method="get" id="filtroForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="categoria">Categoría:</label>
+                                <select name="categoria" id="categoria" class="form-control">
+                                    <option value="">Todas</option>
+                                    {% for categoria in categorias %}
+                                        <option value="{{ categoria.id }}" {% if categoria.id == request.GET.categoria %}selected{% endif %}>{{ categoria.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="q">Buscar por nombre:</label>
+                                <input type="text" name="q" id="q" class="form-control" value="{{ request.GET.q }}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="btn btn-primary btn-block ">Buscar</button>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Categoría</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for documento in documentos %}
+                                <tr>
+                                    <td>{{ documento.titulo | title }}</td>
+                                    <td>{{ documento.categoria.nombre }}</td>
+                                    <td>
+                                        <a href="{{ documento.archivo.url }}" class="btn btn-primary btn-sm"><i class="fas fa-download"></i></a>
+                                        {% if user.is_authenticated %}
+                                            <a href="{% url 'editar_documento' documento.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                                            {% if perms.app.delete_document %}
+                                            <a href="#" onclick="eliminarDocumento({{documento.id}})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Agrega un evento change al menú desplegable de categorías
+    document.getElementById("categoria").addEventListener("change", function() {
+        // Obtiene el formulario por su ID
+        var form = document.getElementById("filtroForm");
+        // Envía el formulario automáticamente
+        form.submit();
+    });
+
+    // Obtiene el valor de categoría seleccionado de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoriaSeleccionada = urlParams.get("categoria");
+
+    // Si hay una categoría seleccionada en la URL, establece la selección en el menú desplegable
+    if (categoriaSeleccionada) {
+        document.getElementById("categoria").value = categoriaSeleccionada;
+    }
+</script>
+
+
+
+
+
+
+
+
+<br><br><br>
+
+
+
+
+{% endblock %}

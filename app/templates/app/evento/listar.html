@@ -1,0 +1,91 @@
+{% extends 'app/admin.html' %} {% load static %} {% block contenido %}
+{% block js %}
+
+<script>
+    function eliminarEvento(id) {
+        Swal.fire({
+            "title": "¿Estas seguro?",
+            "text": "esta acción no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3545"
+        })
+        .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_evento/" + id + "/"
+                }
+            })
+
+    }
+</script>
+
+{% endblock %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <br>
+            <h2>Eventos</h2>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-9">
+        {% if user.is_authenticated %}
+            <a href="{% url 'crear_evento' %}" class="btn btn-primary btn-sm"> <i class="fas fa-plus"></i> Evento</a>
+            <hr>
+        {% endif %}
+            <div class="card">
+                <div class="card-body">
+
+                    {% for evento in eventos %}
+                    <div class="d-flex justify-content-between">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="date">
+                                    <div class="day fw-bold text-center">{{ evento.fecha.day }}</div>
+                                    <div class="month fw-bold">{{ evento.fecha|date:"M" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-details">
+                            <h5 class="card-title" style="text-align: left;">
+                                {{ evento.titulo }}
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'editar_evento' evento.id %}" class="btn btn-info btn-sm mx-2">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% if perms.app.delete_evento %}
+                                <a href="#" onclick="eliminarEvento({{evento.id}})" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                            </h5>
+                            <br>
+                            <p class="card-text">Horario: {{ evento.horario_inicio }} - {{ evento.horario_fin }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<br><br><br>
+
+
+
+
+{% endblock %}

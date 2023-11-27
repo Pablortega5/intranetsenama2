@@ -1,0 +1,51 @@
+{% extends 'app/base.html' %} {% load static %} {% block contenido %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <br>
+            <h2>Eventos</h2>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+
+                    {% for evento in eventos %}
+                    <div class="d-flex justify-content-between">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="date">
+                                    <div class="day fw-bold text-center">{{ evento.fecha.day }}</div>
+                                    <div class="month fw-bold">{{ evento.fecha|date:"M" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-details">
+                            <h5 class="card-title" style="text-align: left;">
+                                {{ evento.titulo }}
+
+                            </h5>
+                            <br>
+                            <p class="card-text">Horario: {{ evento.horario_inicio }} - {{ evento.horario_fin }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<br><br><br>
+
+{% endblock %}

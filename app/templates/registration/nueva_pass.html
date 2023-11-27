@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <title>Ingreso Sistema</title>
+  </head>
+  <style>
+    .logo-image {
+      max-width: 150px;
+      /* Ajusta el tamaño máximo del logo según tus preferencias */
+      max-height: 150px;
+    }
+  </style>
+
+  <body>
+    <br /><br /><br /><br />
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+          <div class="container">
+            <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Recuperar contraseña</h3>
+              </div>
+              <div class="card-body">
+                <div class="text-center">
+                  <img
+                    src="{% static 'app/img/logo.png' %}"
+                    alt="Logo"
+                    class="logo-image"
+                  />
+                </div>
+                <h3 class="card-title"></h3>
+
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  <h2>Ingresar nueva contraseña</h2>
+                  <p>
+                    Por favor, introduzca su contraseña nueva dos veces para
+                    verificar que la ha escrito correctamente.
+                  </p>
+                  <hr />
+                  <label for="id_new_password1">Contraseña nueva:</label>
+                  <input
+                    type="password"
+                    name="new_password1"
+                    autocomplete="new-password"
+                    required=""
+                    id="id_new_password1"
+                    class="form-control"
+                  />
+                  <br>
+                  <span class="helptext"
+                    ><ul>
+                      <li>
+                        Su contraseña no puede asemejarse tanto a su otra
+                        información personal.
+                      </li>
+                      <li>
+                        Su contraseña debe contener al menos 8 caracteres.
+                      </li>
+                      <li>
+                        Su contraseña no puede ser una clave utilizada
+                        comúnmente.
+                      </li>
+                      <li>
+                        Su contraseña no puede ser completamente numérica.
+                      </li>
+                    </ul></span
+                  >
+                  <label for="id_new_password2"
+                    >Contraseña nueva (confirmación):</label
+                  >
+                  <input
+                    type="password"
+                    name="new_password2"
+                    autocomplete="new-password"
+                    required=""
+                    id="id_new_password2"
+                    class="form-control"
+                  />
+                  <br />
+                  <input
+                    type="submit"
+                    value="Recuperar"
+                    class="btn btn-success float-right"
+                  />
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

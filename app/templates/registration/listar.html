@@ -1,0 +1,79 @@
+{% extends "app/admin.html" %} {% load static %} {% block contenido %}
+{% block js %}
+
+<script>
+    function eliminarUsuario(id) {
+        Swal.fire({
+            "title": "¿Estas seguro?",
+            "text": "esta acción no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3545"
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_usuario/" + id + "/"
+                }
+            })
+
+    }
+</script>
+
+{% endblock %}
+
+
+<div class="container">
+    <h2>Listado de Usuarios</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre de usuario</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Grupo Permisos</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.first_name }}</td>
+                    <td>{{ usuario.last_name }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>
+                        <form method="post" action="{% url 'listar_usuarios' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+                            <select name="grupo_permisos">
+                                <option value="" {% if not usuario.groups.all %} selected {% endif %}>---</option>
+                                {% for grupo in grupos_permisos %}
+                                    <option value="{{ grupo.id }}" {% if grupo in usuario.groups.all %} selected {% endif %}>{{ grupo.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="submit" value="Asignar/Cambiar Grupo">
+                        </form>
+                    </td>
+                    <td>
+                        <!-- Agrega los botones de acciones de usuario aquí -->
+                        <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-info btn-sm">Editar</a>
+                        <a href="#" onclick="eliminarUsuario({{usuario.id}})" class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<br><br><br>
+{% endblock %}

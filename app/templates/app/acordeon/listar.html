@@ -1,0 +1,50 @@
+{% extends 'app/admin.html' %} {% load static %} {% block contenido %}
+{% load crispy_forms_tags %}
+<script>
+    function eliminarSection(id) {
+        Swal.fire({
+            "title": "¿Estas seguro?",
+            "text": "esta acción no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3545"
+        })
+        .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/section_delete/" + id + "/"
+                }
+            })
+
+    }
+</script>
+
+<div class="container">
+    <h2>Lista de Secciones</h2>
+    <div class="row">
+      {% for section in sections %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 d-flex flex-column">
+            <img src="{{ section.image.url }}" class="card-img-top" alt="{{ section.title }}">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ section.title }}</h5>
+              <p class="card-text flex-grow-1">{{ section.content|truncatewords:20 }}</p>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'section_edit' section.id %}" class="btn btn-primary btn-sm">Editar</a>
+              {% if perms.app.delete_categoria_doc %}
+              <a href= "#" onclick="eliminarSection({{section.id}})" class="btn btn-danger btn-sm">Eliminar</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+
+
+
+{% endblock %}

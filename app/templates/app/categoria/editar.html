@@ -1,0 +1,25 @@
+{% extends 'app/admin.html' %} {% load static %} {% block contenido %}
+{% load crispy_forms_tags %}
+<br>
+<div class="container">
+
+    <div class="col-12 col-md-6 offset-md-3">
+        <h1>Actualziar Categoria</h1>
+        <br>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <br>
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </form>
+        </div>
+    </div>
+</div></div>
+<br><br><br>
+
+
+
+
+{% endblock %}

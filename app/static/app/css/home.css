@@ -33,9 +33,94 @@
 
 }
 
+#access {
+    top: 300px;
+    right: 0px;
+    position: fixed;
+    text-align: center;
+    z-index: 999;
+    background: #ffffff;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 05px;
+}
+
+.navLink:hover {
+    transform: scale(1.2);
+  }
+
+  .navLink {
+    transition: all 200ms linear;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #c1d9ee;
+    background: linear-gradient(225deg, #d3eeff, #b1c8e0);
+    box-shadow: -5px 5px 16px #a5bad1,
+      5px -5px 16px #ddedff;
+  }
+
+  .navLink i {
+    font-size: 2em;
+  }
+
+  @media screen and (max-width:425px) {
+    .navLink i {
+      font-size: 1.5em;
+    }
+
+    .navLink {
+      line-height: 1;
+    }
+
+    .navLabel {
+      display: none;
+    }
+  }
+
+  .navLink a {
+    text-decoration: none;
+    color: #204063;
+  }
+
+  .smallContainer {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #c1d9ee;
+  }
+
+  .navLabel {
+    font-size: 12px;
+  }
+
+  .navLinkActive * {
+    color: #fff !important;
+  }
+
+  .navLinkActive {
+    background: #3d5f80;
+  }
 
 
+  .navbar-custom .navbar-nav .nav-link.login-link {
+    color: #ffffff;
+    /* Color de texto blanco */
+  }
 
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .footer {
+    background-color: #1e3680;
+    color: #fff;
+    padding: 1em;
+    margin-top: auto;
+    padding-top: 40px;
+  }
 
 
 

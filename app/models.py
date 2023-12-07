@@ -14,6 +14,7 @@ class Noticia(models.Model):
     imagen = models.ImageField(upload_to='noticias')
     categoria = models.ForeignKey(Categoria_inf, on_delete=models.SET_NULL, null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    link = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.titulo
@@ -47,8 +48,10 @@ class Document(models.Model):
 
 class CarouselItem(models.Model):
     image = models.ImageField(upload_to='carousel_images/')
+    link = models.URLField(blank=True, null=True)
 
-
+    def __str__(self):
+        return f"CarouselItem - {self.image.name}"
 
 class Section(models.Model):
     title = models.CharField(max_length=255)
@@ -57,3 +60,11 @@ class Section(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class Banner(models.Model):
+    image = models.ImageField(upload_to='banner_images/')
+    link = models.URLField()
+
+    def __str__(self):
+        return f"Banner - {self.image.name}"

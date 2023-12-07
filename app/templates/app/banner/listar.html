@@ -1,0 +1,48 @@
+{% extends 'app/admin.html' %}
+{% load static %} 
+{% block contenido %}
+{% block js %}
+<script>
+    function eliminarBanner(id) {
+        Swal.fire({
+            "title": "¿Estás seguro?",
+            "text": "Esta acción no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Sí, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3545"
+        })
+        .then(function (result) {
+            if (result.isConfirmed) {
+                window.location.href = "/eliminar_banner/" + id + "/";
+            }
+        });
+    }
+</script>
+{% endblock %}
+
+<h2>Lista de Banners</h2>
+<div class="row">
+    {% for banner in banners %}
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                {% if banner.link %}
+                    <a href="{{ banner.link }}" target="_blank">
+                        <img src="{{ banner.image.url }}" class="card-img-top" alt="Banner">
+                    </a>
+                {% else %}
+                    <img src="{{ banner.image.url }}" class="card-img-top" alt="Banner">
+                {% endif %}
+                <div class="card-body">
+                    <a href="{% url 'editar_banner' banner.id  %}" class="btn btn-info btn-sm">Editar</a>
+                    {% if perms.app.delete_banner %}
+                        <a href="#" onclick="eliminarBanner({{ banner.id }})" class="btn btn-danger btn-sm">Eliminar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

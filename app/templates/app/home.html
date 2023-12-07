@@ -1,22 +1,25 @@
-{% extends 'app/base.html' %} {% load static %} {% block contenido %}
-<br />
+{% extends 'app/base.html' %} {% load static %} 
 
-<style>
-  .carousel-inner img {
-    max-width: 100%;
-    max-height: 100%;
-    width: 100;
-    height: auto;
-  }
-</style>
 
+
+
+
+
+{% block carrusel %} 
 <div class="fixed-carousel" style="background: linear-gradient(45deg, #0033a0 50%, #d52b1e 50%)">
   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       {% for item in carousel_items %}
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
           <div class="image-container">
+        {% if item.link %}
+            <a href="{{ item.link }}" target="_blank">
+                <img src="{{ item.image.url }}" class="d-block mx-auto" alt="Carousel Image">
+            </a>
+        {% else %}
             <img src="{{ item.image.url }}" class="d-block mx-auto" alt="Carousel Image">
+        {% endif %}
+
           </div>
         </div>
       {% endfor %}
@@ -33,31 +36,34 @@
 </div>
 
 <hr />
+{% endblock %}
+{% block contenido %}
 <br />
-<div class="container">
-  <div class="accordion" id="accordionPanelsStayOpenExample">
+<div class="container ">
+  
+  <div class="accordion accordion-flush " id="accordionFlushExample">
     {% for section in sections %}
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button
-            class="accordion-button{% if forloop.first %} show{% endif %}"
+            class="accordion-button collapsed"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#section{{ section.id }}"
-            aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
-            aria-controls="section{{ section.id }}"
+            data-bs-target="#flush-collapse{{ section.id }}"
+            aria-expanded="false"
+            aria-controls="flush-collapse{{ section.id }}"
           >
-            {{ section.title | title }}
+            {{ section.title | capfirst }}
           </button>
         </h2>
-        <div id="section{{ section.id }}" class="accordion-collapse collapse{% if forloop.first %} show{% endif %}">
+        <div id="flush-collapse{{ section.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
           <div class="accordion-body">
             <div class="row">
               <div class="col-md-5">
-                <img src="{{ section.image.url }}" alt="{{ section.title }}" class="img-fluid rounded ">
+                <img src="{{ section.image.url }}" alt="{{ section.title }}" class="img-fluid rounded">
               </div>
               <div class="col-md-7">
-                <h2>{{ section.title | title }}</h2>
+                <h2>{{ section.title | capfirst }}</h2>
                 <hr />
                 <p>{{ section.content | linebreaks | safe }}</p>
               </div>
@@ -67,6 +73,7 @@
       </div>
     {% endfor %}
   </div>
+  
 </div>
 <br>
 
@@ -78,12 +85,12 @@
         <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs" id="myTab">
             <li class="nav-item">
-              <a href="#home" class="nav-link active" data-bs-toggle="tab"
+              <a href="#home" class="nav-link active" data-bs-toggle="tab" title="Ver las últimas noticias"
                 >Noticias</a
               >
             </li>
             <li class="nav-item">
-              <a href="#profile" class="nav-link" data-bs-toggle="tab"
+              <a href="#profile" class="nav-link" data-bs-toggle="tab" title="Explorar datos "
                 >Datos</a
               >
             </li>
@@ -176,10 +183,30 @@
       </div>
     </div>
     <div class="col-md-4">
+      <h2>Destacados</h2>
+      <div class="row">
+        {% for banner in banners %}
+           <div>
+                <div class="card">
+                    {% if banner.link %}
+                        <a href="{{ banner.link }}" target="_blank">
+                            <img src="{{ banner.image.url }}" class="card-img-top img-fluid" alt="Banner">
+                        </a>
+                    {% else %}
+                        <img src="{{ banner.image.url }}" class="card-img-top img-fluid" alt="Banner">
+                    {% endif %}
+             
+            </div>
+            <br>
+            </div>
+        {% endfor %}
+        
+    </div>
+    <hr>
       <h2>Eventos</h2>
       <div class="card">
         <div class="card-body">
-          {% for evento in eventos %}
+          {% for evento in eventos  %}
           <div class="d-flex justify-content-between">
             <div class="card bg-warning text-white">
               <div class="card-body">

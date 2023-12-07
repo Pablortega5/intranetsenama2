@@ -10,8 +10,13 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
-                        {{ form.image.label_tag }}
+                        {{ form.image.label_tag }} <br>
+                        - selecciona una imagen que tenga una resolución de 1024x512 píxeles.
                         {{ form.image }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.link.label_tag }}
+                        {{ form.link }}
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </form>
@@ -20,6 +25,4 @@
     </div>
 </div>
 <br><br><br>
-
-
 {% endblock %}

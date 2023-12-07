@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import CarouselItem, Noticia,Evento, Document, Categoria_doc, Section
+from .models import Banner, CarouselItem, Noticia,Evento, Document, Categoria_doc, Section
 from datetime import date
-from .forms import CustomUserCreationForm, EventoForm, NoticiaForm, DocumentForm, CategoriaForm, CarouselItemForm, SectionForm
+from .forms import BannerForm, CustomUserCreationForm, EventoForm, NoticiaForm, DocumentForm, CategoriaForm, CarouselItemForm, SectionForm
 from django.db.models import F
 from django.utils import timezone
 from django.contrib import messages
@@ -11,6 +11,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth.models import Group
+import os
 # Create your views here.
 
 
@@ -18,17 +19,19 @@ from django.contrib.auth.models import Group
 def home(request):
     noticias = Noticia.objects.order_by('-fecha_creacion')[:5]
     eventos = Evento.objects.all().order_by('fecha')
-    eventos_proximos = eventos.filter(fecha__gte=date.today())[:5]
+    eventos_proximos = eventos.filter(fecha__gte=date.today())[:3]
     documentos = Document.objects.all()
     carousel_items = CarouselItem.objects.all()
     sections = Section.objects.all()
+    banners = Banner.objects.all()[:5]
 
     data = {
         'noticias': noticias,
         'eventos': eventos_proximos,
         'documentos': documentos,
         'carousel_items': carousel_items,
-        'sections': sections
+        'sections': sections,
+        'banners': banners,
     }
 
     return render(request, 'app/home.html', data)
@@ -128,10 +131,20 @@ def editar_documento(request, id):
 
         return render(request, 'app/documento/editar.html', data)
 @permission_required('app.delete_document')
-def eliminar_documento (request, id):
-        documento = get_object_or_404(Document, id=id)
-        documento.delete()
-        return redirect(to="listar_documentos")
+def eliminar_documento(request, id):
+    documento = get_object_or_404(Document, id=id)
+
+    # Obtén la ruta completa del archivo en el sistema de archivos
+    archivo_ruta = documento.archivo.path
+
+    # Elimina la instancia del modelo
+    documento.delete()
+
+    # Elimina el archivo físico
+    if os.path.exists(archivo_ruta):
+        os.remove(archivo_ruta)
+
+    return redirect(to="listar_documentos")
 @permission_required('app.add_evento')
 def crear_evento(request):
         data = {
@@ -176,7 +189,7 @@ def eliminar_evento (request, id):
         evento = get_object_or_404(Evento, id=id)
         evento.delete()
         return redirect(to="listar_eventos")
-@permission_required('app.add_user')
+@permission_required('auth.add_user')
 def registro(request):
      data = {
           'form': CustomUserCreationForm()
@@ -197,7 +210,7 @@ def registro(request):
 def admin(request): 
 
         return render(request, 'app/admin.html')
-@permission_required('app.add_categoria')
+@permission_required('app.add_categoria_doc')
 def crear_categoria(request):
         data = {
                 'form': CategoriaForm()
@@ -213,7 +226,7 @@ def crear_categoria(request):
                         print(formulario.errors)
 
         return render (request,'app/categoria/crear.html', data)
-@permission_required('app.add_categoria')
+@permission_required('app.add_categoria_doc')
 def listar_categorias(request):
         categorias = Categoria_doc.objects.all 
         
@@ -223,7 +236,7 @@ def listar_categorias(request):
 
         }
         return render(request, 'app/categoria/listar.html', data)
-@permission_required('app.add_categoria')
+@permission_required('app.add_categoria_doc')
 def editar_categoria(request, id):
        
         categoria = get_object_or_404(Categoria_doc, id=id)
@@ -240,13 +253,13 @@ def editar_categoria(request, id):
 
         return render(request, 'app/categoria/editar.html', data)
 
-@permission_required('app.delete_categoria')
+@permission_required('app.delete_categoria_doc')
 def eliminar_categoria (request, id):
         categoria = get_object_or_404(Categoria_doc, id=id)
         categoria.delete()
         return redirect(to="listar_categorias")
 
-@permission_required('app.add_user')
+@permission_required('auth.add_user')
 def listar_usuarios(request):
     # Obtener la lista de usuarios ordenados por id
     usuarios = User.objects.all().order_by('id')
@@ -279,14 +292,14 @@ def listar_usuarios(request):
     return render(request, "registration/listar.html", data)
 
 
-@permission_required('app.add_user')
+@permission_required('auth.add_user')
 def eliminar_usuario(request, id):
     usuario = get_object_or_404(User, id=id)
     usuario.delete()
     messages.success(request, "Eliminado correctamente")
     return redirect(to="listar_usuarios")
 
-@permission_required('app.add_user')
+@permission_required('auth.add_user')
 def editar_usuario(request, id):
     usuario = get_object_or_404(User, id=id)
 
@@ -345,14 +358,15 @@ def listar_documentos_home(request):
 
     return render(request, 'app/home/listar_documentos.html', data)
 
-
+@login_required
 def add_image(request):
     if request.method == 'POST':
         form = CarouselItemForm(request.POST, request.FILES)
         if form.is_valid():
             # Guarda la imagen en el modelo del carrusel
             image = form.cleaned_data['image']
-            CarouselItem.objects.create(image=image)
+            link = form.cleaned_data['link']
+            CarouselItem.objects.create(image=image, link=link)
             return redirect('listar_imagenes')  
     else:
         form = CarouselItemForm()
@@ -364,12 +378,58 @@ def listar_imagenes(request):
     images = CarouselItem.objects.all()
     return render(request, 'app/carrusel/listar.html', {'images': images})
 
+def listar_banners(request):
+    banners = Banner.objects.all()
+    return render(request, 'app/banner/listar.html', {'banners': banners})
+
+@login_required
+def crear_banner(request):
+    if request.method == 'POST':
+        form = BannerForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Guarda la imagen en el modelo del banner
+            image = form.cleaned_data['image']
+            link = form.cleaned_data['link']
+            Banner.objects.create(image=image, link=link)
+            return redirect('listar_banners')  
+    else:
+        form = BannerForm()
+
+    return render(request, 'app/banner/crear.html', {'form': form})
+
+@login_required
+def editar_banner(request, banner_id):
+    banner = get_object_or_404(Banner, pk=banner_id)
+
+    if request.method == 'POST':
+        form = BannerForm(request.POST, request.FILES, instance=banner)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_banners')  # Cambia a la URL deseada
+    else:
+        form = BannerForm(instance=banner)
+
+    return render(request, 'app/banner/editar.html', {'form': form, 'banner': banner})
+
+@permission_required('app.delete_categoria')
+def eliminar_banner(request, banner_id):
+    banner = get_object_or_404(Banner, pk=banner_id)
+
+    # Elimina la imagen asociada al banner del sistema de archivos
+    banner.image.delete(save=False)
+
+    # Elimina el banner de la base de datos
+    banner.delete()
+
+    return redirect('listar_banners')
+
 @permission_required('app.delete_categoria')
 def eliminar_imagen(request, image_id):
     image = CarouselItem.objects.get(pk=image_id)
+    image.image.delete(save=False)
     image.delete()
     return redirect('listar_imagenes')
-
+@login_required
 def section_create(request):
     if request.method == 'POST':
         form = SectionForm(request.POST, request.FILES)
@@ -383,7 +443,7 @@ def section_create(request):
 def section_list(request):
     sections = Section.objects.all()
     return render(request, 'app/acordeon/listar.html', {'sections': sections})
-
+@login_required
 def section_edit(request, section_id):
     section = get_object_or_404(Section, pk=section_id)
     if request.method == 'POST':

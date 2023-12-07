@@ -7,29 +7,29 @@
 
 </style>
 <br />
-<div class="container align-items-center justify-content-center" >
+<div class="container align-items-center justify-content-center">
   <div class="row">
     <div class="col-9 mx-auto">
       <div class="card m-3">
         <div class="card-body">
           <div class="text-center">
             {% if noticia.imagen %}
-            <img
-              src="{{ noticia.imagen.url }}"
-              class="img-fluid rounded mx-auto d-block"
-              alt="Noticia"
-              
-            />
+              <img
+                src="{{ noticia.imagen.url }}"
+                class="img-fluid rounded mx-auto d-block"
+                alt="Noticia"
+              />
             {% else %}
-            
               <img src="{% static 'app/img/Logo.png' %}" class="img-fluid  rounded mx-auto d-block" alt="Noticia">
-           
             {% endif %}
           </div>
           <hr />
           <h6>{{ noticia.fecha_creacion }}</h6>
           <h1 class="card-header">{{ noticia.titulo | title }}</h1>
-          <p class="justified-text">{{ noticia.cuerpo | linebreaks | safe }}</p>
+          <p class="justified-text">{{ noticia.cuerpo | linebreaks | safe }}
+            {% if noticia.link %}
+            <a href="{{ noticia.link }}" class="btn btn-primary btn-sm"><i class="fas fa-link"></i></a>
+            {% endif %}</p>
         </div>
         <div class="card-footer text-right">
           <a href="{% url 'listar_noticias_home' %}" class="btn btn-secondary">

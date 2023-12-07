@@ -132,6 +132,24 @@
                     </div>
                 </div>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBanner"
+                    aria-expanded="true" aria-controls="collapseBanner">
+                    <i class="fas fa-fw fa-file-image"></i>
+                    <span>Banner</span>
+                </a>
+                <div id="collapseBanner" class="collapse" aria-labelledby="headingPages"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{% url 'listar_banners' %}" ><i
+                                class="fas fa-list-ul"></i>&nbsp; Listar</a>
+                        <a class="collapse-item" href="{% url 'crear_banner' %}"><i class="fas fa-plus"></i>&nbsp;
+                            Agregar</a>
+
+                    </div>
+                </div>
+            </li>
+            
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -194,7 +212,7 @@
                 </div>
             </li>
 
-            {% if perms.app.add_user %}
+            {% if perms.auth.add_user %}
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuario"
                     aria-expanded="true" aria-controls="collapseUsuario">
@@ -270,7 +288,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        
                     </div>
                 </div>
             </footer>

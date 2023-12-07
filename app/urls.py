@@ -3,12 +3,15 @@ from django.urls import path
 
 from .views import (
     add_image,
+    crear_banner,
     crear_categoria,
     crear_evento,
+    editar_banner,
     editar_categoria,
     editar_documento,
     editar_evento,
     editar_usuario,
+    eliminar_banner,
     eliminar_categoria,
     eliminar_documento,
     eliminar_evento,
@@ -16,6 +19,7 @@ from .views import (
     eliminar_usuario,
     home,
     crear_noticia,
+    listar_banners,
     listar_categorias,
     listar_documentos_home,
     listar_eventos,
@@ -71,5 +75,9 @@ urlpatterns = [
     path('section_list/', section_list, name='section_list'),
     path('section_edit/<int:section_id>/', section_edit, name='section_edit'),
     path('section_delete/<int:section_id>/', section_delete, name='section_delete'),
+    path('crear_banner/', crear_banner, name='crear_banner'),
+    path('editar_banner/<int:banner_id>/', editar_banner, name='editar_banner'),
+    path('listar_banners/', listar_banners, name='listar_banners'),
+    path('eliminar_banner/<int:banner_id>/', eliminar_banner, name='eliminar_banner'),
     
 ]

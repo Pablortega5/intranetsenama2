@@ -29,17 +29,22 @@
     {% for image in images %}
         <div class="col-md-3 mb-4">
             <div class="card">
-                <img src="{{ image.image.url }}" class="card-img-top" alt="Image">
+                {% if image.link %}
+                    <a href="{{ image.link }}" target="_blank">
+                        <img src="{{ image.image.url }}" class="card-img-top" alt="Image">
+                    </a>
+                {% else %}
+                    <img src="{{ image.image.url }}" class="card-img-top" alt="Image">
+                {% endif %}
                 <div class="card-body">
                     {% if perms.app.delete_categoria_doc %}
-                    <a href= "#" onclick="eliminarImagen({{image.id}})" class="btn btn-danger btn-sm">Eliminar</a>
+                        <a href="#" onclick="eliminarImagen({{ image.id }})" class="btn btn-danger btn-sm">Eliminar</a>
                     {% endif %}
                 </div>
             </div>
         </div>
     {% endfor %}
 </div>
-
 
 
 

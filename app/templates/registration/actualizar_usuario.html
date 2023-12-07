@@ -15,6 +15,15 @@
                             <label for="id_username">Nombre de usuario:</label>
 
                             {{form.username}}
+                            <div>
+                                {% if form.username.errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.username.errors %}
+                                    {{error}}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
 
                             <br />
                             <span class="helptext">Requerido. 150 carácteres como máximo. Únicamente letras,
@@ -24,6 +33,7 @@
                             <label for="id_first_name">Nombre:</label>
 
                             {{form.first_name}}
+
                             <br />
                             <label for="id_last_name">Apellidos:</label>
 
@@ -37,6 +47,15 @@
 
                             <input type="password" name="password1" autocomplete="new-password" required=""
                                 id="id_password1" class="form-control" />
+                            <div>
+                                {% if form.password1.errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.password1.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
 
                             <br />
                             <span class="helptext">
@@ -62,6 +81,15 @@
 
                             <input type="password" name="password2" autocomplete="new-password" required=""
                                 id="id_password2" class="form-control" />
+                            <div>
+                                {% if form.password2.errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.password2.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
 
                             <br />
                             <span class="helptext">Para verificar, introduzca la misma contraseña

@@ -17,7 +17,15 @@
                             <input type="text" name="username" maxlength="150" autocapitalize="none"
                                 autocomplete="username" autofocus="" required="" id="id_username"
                                 class="form-control" />
-
+                            <div>
+                                {% if form.username.errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.username.errors %}
+                                    {{error}}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
                             <br />
                             <span class="helptext">Requerido. 150 carácteres como máximo. Únicamente letras,
                                 dígitos y @/./+/-/_
@@ -27,6 +35,7 @@
 
                             <input type="text" name="first_name" maxlength="150" id="id_first_name"
                                 class="form-control" />
+
                             <br />
                             <label for="id_last_name">Apellidos:</label>
 
@@ -36,12 +45,29 @@
                             <label for="id_email">Dirección de correo electrónico:</label>
 
                             <input type="email" name="email" maxlength="254" id="id_email" class="form-control" />
+                            <div>
+                                {% if form.email.errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.email.errors %}
+                                    {{error}}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
                             <br />
                             <label for="id_password1">Contraseña:</label>
 
-                            <input type="password" name="password1" autocomplete="new-password" required=""
-                                id="id_password1" class="form-control" />
+                            <input type="password" name="password1" autocomplete="new-password" required="" id="id_password1" class="form-control" />
 
+                            <div>
+                                {% if form.password1.errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in form.password1.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
                             <br />
                             <span class="helptext">
                                 <ul>
@@ -66,6 +92,15 @@
 
                             <input type="password" name="password2" autocomplete="new-password" required=""
                                 id="id_password2" class="form-control" />
+                                <div>
+                                    {% if form.password2.errors %}
+                                        <div class="alert alert-danger">
+                                            {% for error in form.password2.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
 
                             <br />
                             <span class="helptext">Para verificar, introduzca la misma contraseña

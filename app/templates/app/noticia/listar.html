@@ -70,6 +70,9 @@
                                             <h5 class="card-title">{{n.titulo | title }}</h5>
                                             <p class="card-text">
                                                 {{n.cuerpo | capfirst | slice:":200" }}{% if n.cuerpo|length > 200 %}...{% endif %}
+                                                {% if n.link %}
+                                                 <a href="{{ n.link }}" class="btn btn-primary btn-sm"><i class="fas fa-link"></i></a>
+                                                 {% endif %}
                                             </p>
                                         </div>
                                     </div>
@@ -117,6 +120,9 @@
                                             <h5 class="card-title">{{n.titulo | title }}</h5>
                                             <p class="card-text">
                                                 {{n.cuerpo | capfirst | slice:":200" }}{% if n.cuerpo|length > 200 %}...{% endif %}
+                                                {% if n.link %}
+                                                 <a href="{{ n.link }}" class="btn btn-primary btn-sm"><i class="fas fa-link"></i></a>
+                                                 {% endif %}
                                             </p>
                                         </div>
                                     </div>
